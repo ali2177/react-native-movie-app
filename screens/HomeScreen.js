@@ -5,14 +5,19 @@ import {
   StatusBar,
   Platform,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import {
   Bars3CenterLeftIcon,
   MagnifyingGlassIcon,
 } from "react-native-heroicons/outline";
 import { styles } from "../theme";
+import { useState } from "react";
+import TrendingMovie from "../components/TrendingMovie";
+
 const ios = Platform.OS == "ios";
 const HomeScreen = () => {
+  const [trending, setTrending] = useState([1, 2, 3, 4]);
   return (
     <View className="flex-1 bg-neutral-800">
       <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>
@@ -27,6 +32,13 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 10 }}
+      >
+        {/* trending movie carousel */}
+        <TrendingMovie data={trending} />
+      </ScrollView>
     </View>
   );
 };
