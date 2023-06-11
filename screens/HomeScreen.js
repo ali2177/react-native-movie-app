@@ -14,10 +14,13 @@ import {
 import { styles } from "../theme";
 import { useState } from "react";
 import TrendingMovie from "../components/TrendingMovie";
+import MovieList from "../components/MovieList";
 
 const ios = Platform.OS == "ios";
 const HomeScreen = () => {
   const [trending, setTrending] = useState([1, 2, 3, 4]);
+  const [upcoming, setUpcoming] = useState([1, 2, 3, 4]);
+  const [topRated, setTopRated] = useState([1, 2, 3, 4]);
   return (
     <View className="flex-1 bg-neutral-800">
       <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>
@@ -38,6 +41,12 @@ const HomeScreen = () => {
       >
         {/* trending movie carousel */}
         <TrendingMovie data={trending} />
+
+        {/* upcomming movies */}
+        <MovieList title="Upcoming Movies" data={upcoming} />
+
+        {/* TopRated movies */}
+        <MovieList title="TopRated Movies" data={topRated} />
       </ScrollView>
     </View>
   );

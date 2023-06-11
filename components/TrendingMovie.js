@@ -2,16 +2,18 @@ import { View, Text, Image, Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 let { width, height } = Dimensions.get("window");
 
-const movieCardPressHandler = ({ navigation }) => {
-  navigation.navigate("Movie", item);
-};
 const TrendingMovie = ({ data }) => {
+  const navigation = useNavigation();
+  const movieCardPressHandler = () => {
+    navigation.navigate("Movie", item);
+  };
   return (
     <View className="mb-8">
-      <Text className="text-white text-xl mx-4 mb-5">Trending</Text>
+      <Text className="text-white text-lg mx-4 mb-5">Trending</Text>
       <Carousel
         data={data}
         renderItem={({ item }) => (
