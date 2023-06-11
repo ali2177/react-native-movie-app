@@ -12,21 +12,23 @@ import { styles } from "../theme";
 import { useNavigation } from "@react-navigation/native";
 
 let { width, height } = Dimensions.get("window");
-const MovieList = ({ title, data }) => {
+const MovieList = ({ title, data, hideSeeAll }) => {
   const navigation = useNavigation();
   let movieName = "Ant-man and the Wasp: Quantumania";
 
   const clickHandler = () => {
-    navigation.navigate("Movie", item);
+    navigation.push("Movie", item);
   };
   return (
     <View className="mb-8 space-y-4">
       <View className="mx-4 flex-row justify-between items-center">
         <Text className="text-white text-lg">{title}</Text>
         <TouchableOpacity>
-          <Text style={styles.text} className="text-base">
-            See All
-          </Text>
+          {!hideSeeAll && (
+            <Text style={styles.text} className="text-base">
+              See All
+            </Text>
+          )}
         </TouchableOpacity>
       </View>
       {/* movie row */}

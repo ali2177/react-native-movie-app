@@ -8,7 +8,7 @@ let { width, height } = Dimensions.get("window");
 
 const TrendingMovie = ({ data }) => {
   const navigation = useNavigation();
-  const movieCardPressHandler = () => {
+  const movieCardPressHandler = (item) => {
     navigation.navigate("Movie", item);
   };
   return (
@@ -17,7 +17,7 @@ const TrendingMovie = ({ data }) => {
       <Carousel
         data={data}
         renderItem={({ item }) => (
-          <MovieCard item={item} onPress={movieCardPressHandler} />
+          <MovieCard item={item} onPress={() => movieCardPressHandler(item)} />
         )}
         firstItem={1}
         inactiveSlideOpacity={0.6}
