@@ -17,7 +17,7 @@ import TrendingMovie from "../components/TrendingMovie";
 import MovieList from "../components/MovieList";
 
 const ios = Platform.OS == "ios";
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [trending, setTrending] = useState([1, 2, 3, 4]);
   const [upcoming, setUpcoming] = useState([1, 2, 3, 4]);
   const [topRated, setTopRated] = useState([1, 2, 3, 4]);
@@ -30,7 +30,11 @@ const HomeScreen = () => {
           <Text className="text-white text-3xl font-bold">
             <Text style={styles.text}>M</Text>ovies
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Search");
+            }}
+          >
             <MagnifyingGlassIcon size={30} strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
