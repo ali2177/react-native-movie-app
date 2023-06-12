@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
 import MovieScreen from "../screens/MovieScreen";
+import PersonScreen from "../screens/PersonScreen";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,11 @@ const AppNavigation = ({ children }) => {
           name="Movie"
           options={{ headerShown: false }}
           component={MovieScreen}
+        />
+        <Stack.Screen
+          name="Person"
+          options={{ headerShown: false }}
+          component={PersonScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
