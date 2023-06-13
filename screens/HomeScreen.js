@@ -12,17 +12,44 @@ import {
   MagnifyingGlassIcon,
 } from "react-native-heroicons/outline";
 import { styles } from "../theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TrendingMovie from "../components/TrendingMovie";
 import MovieList from "../components/MovieList";
 import Loading from "../components/Loading";
+import {
+  fetchTopRatedMovies,
+  fetchTrendingMovies,
+  fetchUpcomingMovies,
+} from "../api/movieDb";
 
 const ios = Platform.OS == "ios";
 const HomeScreen = ({ navigation }) => {
-  const [trending, setTrending] = useState([1, 2, 3, 4]);
-  const [upcoming, setUpcoming] = useState([1, 2, 3, 4]);
-  const [topRated, setTopRated] = useState([1, 2, 3, 4]);
+  const [trending, setTrending] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
+  const [topRated, setTopRated] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    gettrendingMovies();
+    getupcomingMovies();
+    getTopRatedMovies();
+  }, []);
+
+  const gettrendingMovies = async () => {
+    const data = await fetchTrendingMovies();
+    if (data && data.results) setTrending(data.results);
+    setIsLoading(false);
+  };
+  const getupcomingMovies = async () => {
+    const data = await fetchUpcomingMovies();
+    if (data && data.results) setUpcoming(data.results);
+    setIsLoading(false);
+  };
+  const getTopRatedMovies = async () => {
+    const data = await fetchTopRatedMovies();
+    if (data && data.results) setTopRated(data.results);
+    setIsLoading(false);
+  };
   return (
     <View className="flex-1 bg-neutral-800">
       <SafeAreaView className={ios ? "-mb-2" : "mb-3"}>

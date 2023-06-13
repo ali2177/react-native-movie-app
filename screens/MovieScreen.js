@@ -16,6 +16,12 @@ import { HeartIcon } from "react-native-heroicons/solid";
 import { LinearGradient } from "expo-linear-gradient";
 import Cast from "../components/Cast";
 import MovieList from "../components/MovieList";
+import {
+  fetchMovieCredits,
+  fetchMoviesDetail,
+  fetchSimilarMovies,
+} from "../api/movieDb";
+import { image500 } from "../api/movieDb";
 
 let movieName = "Ant-man and the Wasp: Quantumania";
 let { width, height } = Dimensions.get("window");
@@ -24,11 +30,29 @@ const marginTop = ios ? "" : " mt-3";
 
 const MovieScreen = () => {
   const navigation = useNavigation();
-  const { params: item } = useRoute();
+  const { params: movieID } = useRoute();
   const [isFavourite, setIsFavourite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6, 7]);
-  const [similarMovies, setSimilarMovie] = useState([1, 2, 3, 4, 5, 6, 7]);
-  useEffect(() => {}, [item]);
+  const [cast, setCast] = useState([]);
+  const [movie, setMovie] = useState({});
+  const [similarMovies, setSimilarMovie] = useState([]);
+  useEffect(() => {
+    getMoviesDetail(movieID);
+    getMoviesCast(movieID);
+    getMoviesSimiler(movieID);
+  }, [movieID]);
+
+  const getMoviesDetail = async (id) => {
+    const data = await fetchMoviesDetail(id);
+    if (data) setMovie({ ...movie, ...data });
+  };
+  const getMoviesCast = async (id) => {
+    const data = await fetchMovieCredits(id);
+    if (data && data.cast) setCast(data.cast);
+  };
+  const getMoviesSimiler = async (id) => {
+    const data = await fetchSimilarMovies(id);
+    if (data && data.results) setSimilarMovie(data.results);
+  };
 
   // handler
   const backPressHandler = () => {
@@ -65,7 +89,7 @@ const MovieScreen = () => {
         </SafeAreaView>
         <View>
           <Image
-            source={require("../assets/images/moviePoster2.png")}
+            source={{ uri: image500(movie.poster_path) }}
             style={{ width: width, height: height * 0.55 }}
           />
           <LinearGradient
@@ -85,44 +109,39 @@ const MovieScreen = () => {
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
         {/* title */}
         <Text className="text-white text-center text-3xl font-bold tracking-wider">
-          {movieName}
+          {movie?.original_title}
         </Text>
         {/* status , release , runtime */}
         <Text className="text-neutral-400 font-semibold text-base text-center">
-          Released . 2020 . 170 min
+          {movie?.status} . {movie?.release_date} . {movie?.runtime} min
         </Text>
         {/* genres */}
         <View className="flex-row justify-center mx-4 space-x-2">
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Action .
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Thrill .
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Comedy
-          </Text>
+          {movie?.genres?.map((genre, index) => (
+            <Text
+              key={index}
+              className="text-neutral-400 font-semibold text-base text-center"
+            >
+              {genre.name} .
+            </Text>
+          ))}
         </View>
         {/* description */}
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Necessitatibus optio atque aut aliquam totam! Nemo perferendis aperiam
-          tenetur! Ipsum tempore, laborum corporis aut aspernatur praesentium
-          accusantium officia minima cupiditate necessitatibus. Numquam aliquam
-          deleniti quae quod mollitia similique eos ratione suscipit aspernatur
-          reiciendis harum provident officiis praesentium adipisci quos corporis
-          velit, neque aliquid tempore! Distinctio aut impedit nihil laudantium
-          eius ratione.
+          {movie.overview}
         </Text>
       </View>
       {/* cast */}
-      <Cast navigation={navigation} cast={cast} />
+      {cast.length > 0 && <Cast navigation={navigation} cast={cast} />}
+
       {/* similer movies */}
-      <MovieList
-        title="Similar Movies"
-        hideSeeAll={true}
-        data={similarMovies}
-      />
+      {similarMovies.length > 0 && (
+        <MovieList
+          title="Similar Movies"
+          hideSeeAll={true}
+          data={similarMovies}
+        />
+      )}
     </ScrollView>
   );
 };

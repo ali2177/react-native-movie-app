@@ -7,12 +7,14 @@ import {
   Dimensions,
 } from "react-native";
 import React from "react";
+import { image185 } from "../api/movieDb";
 
 const personName = "Keanu Reavies";
 const characterName = "John Wick";
 
 let { width, height } = Dimensions.get("window");
 const Cast = ({ cast, navigation }) => {
+  console.log(cast);
   return (
     <View className="my-6">
       <Text className="text-white text-lg mx-4 mb-5">Top Cast</Text>
@@ -34,19 +36,19 @@ const Cast = ({ cast, navigation }) => {
                 <View className="overflow-hidden rounded-full h-20 w-20 items-center border border-neutral-500">
                   <Image
                     className="rounded-2xl h-24 w-20"
-                    source={require("../assets/images/castImage1.png")}
+                    source={{ uri: image185(person.profile_path) }}
                   />
                 </View>
 
                 <Text className="text-white text-xs mt-1">
-                  {characterName.length > 10
-                    ? characterName.slice(0, 10) + "..."
-                    : characterName}
+                  {person?.character?.length > 10
+                    ? person?.character?.slice(0, 10) + "..."
+                    : person?.character}
                 </Text>
                 <Text className="text-xs mt-1 text-neutral-400">
-                  {personName.length > 10
-                    ? personName.slice(0, 10) + "..."
-                    : personName}
+                  {person?.name.length > 10
+                    ? person?.name.slice(0, 10) + "..."
+                    : person?.name}
                 </Text>
               </TouchableOpacity>
             );
